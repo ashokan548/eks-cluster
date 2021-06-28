@@ -10,7 +10,7 @@ jobs:
     name: terraform deployment
     runs-on: ubuntu-latest
     env:
-      bucket: backend-bucket-name-terraform
+      bucket: User2527
     steps:
       - name: checkout
         uses: actions/checkout@v1
@@ -32,7 +32,7 @@ jobs:
           terraform init \
             -backend-config="bucket=${{ env.bucket }}" \
             -backend-config="key=${{ github.event.inputs.name }}/tfstate.tfstate" \
-            -backend-config="region=eu-central-1" \
+            -backend-config="region=ap-south-1" \
             -backend=true
 
       - name: terraform plan
