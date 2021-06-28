@@ -6,7 +6,7 @@ pipeline {
         REGION = credentials('REGION')
         ECR_REPO = credentials('ECR_REPO')
         ECR_REPO_URL = credentials('ECR_REPO_URL')
-        EKS_CLUTER_NAME = "tspring-staging"
+        EKS_CLUTER_NAME = "demo-dev"
         IMAGE_NAME = "node${BUILD_ID}"
 //         SONAR_PROJECT_NAME= "tspring-api"
 //         SONAR_PROJECT_LOGIN = credentials('tspring-api-login')
