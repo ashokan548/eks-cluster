@@ -50,7 +50,9 @@ pipeline {
                 export imageNameandversion=$ECR_REPO:$IMAGE_NAME
                 sed -i "s|containerImageName|$imageNameandversion|" kube-deployment/api-server.yml
                 aws eks --region $REGION update-kubeconfig --name $EKS_CLUTER_NAME
-                /usr/local/bin/kubectl apply -f kube-deployment/ -n development
+                /usr/local/bin/kubectl apply -f kube-deployment/ 
+                sleep 30
+                /usr/local/bin/kubectl get all
                 unset imageNameandversion
             '''
             }
