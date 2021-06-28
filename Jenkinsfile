@@ -48,7 +48,7 @@ pipeline {
         steps {
             sh '''
                 export imageNameandversion=$ECR_REPO:$IMAGE_NAME
-                sed -i "s|containerImageName|$imageNameandversion|" kube-deployment/api-server.yml
+                sed -i "s|containerImageName|$imageNameandversion|" kube-deployment/main.yml
                 aws eks --region $REGION update-kubeconfig --name $EKS_CLUTER_NAME
                 /usr/local/bin/kubectl apply -f kube-deployment/ 
                 sleep 30
