@@ -3,7 +3,7 @@ pipeline {
     environment {
         AWS_ACCESS_KEY_ID = credentials('jenkins-aws-secret-key-id')
         AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
-        REGION = credentials('REGION')
+        REGION = "eu-central-1"
         ECR_REPO = credentials('ECR_REPO')
         ECR_REPO_URL = credentials('ECR_REPO_URL')
         EKS_CLUTER_NAME = "demo-dev"
