@@ -26,7 +26,7 @@ pipeline {
         stage('DOCKER IMAGE BUILD') {
         steps {
             sh '''
-                docker build -t $ECR_REPO:${IMAGE_NAME} .
+                docker build -t $ECR_REPO:${IMAGE_NAME} node-app/
                 echo "completed"
                 echo $IMAGE_NAME
                 '''
