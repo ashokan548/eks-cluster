@@ -1,0 +1,65 @@
+name: build push and deployment
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "target environment name"
+        required: true
+jobs:
+  deploy_source:
+    name: app deployment
+    runs-on: ubuntu-latest
+    env:
+      CN: demo-dev
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+ 
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: node-app/
+          push: true
+          tags: jjino/node-app:11
+
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.SECRET_KEY }}
+          aws-region: eu-central-1
+
+      - name: set path variables as kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl && mkdir bin && mv kubectl bin/
+          export PATH=$PATH:$HOME/bin  
+
+      - name: kubernetes credentials download
+        run: aws eks --region eu-central-1 update-kubeconfig --name $CN
+
+      - name: docker image configuration
+        run: |
+          TAG=11
+          IMAGE=node-app:$TAG
+          DOCKER_HUB=jjino
+          sed -i 's/containerImageName/'"$DOCKER_HUB\/$IMAGE"'/g' kube-deployment/main.yml
+
+      - name: kubernetes deployment configuration
+        run: kubectl apply -f kube-deployment/main.yml
+
+      - name: kubernetes get status
+        run: kubectl get po,svc
+
