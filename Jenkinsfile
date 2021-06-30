@@ -8,21 +8,8 @@ pipeline {
         ECR_REPO_URL = credentials('ECR_REPO_URL')
         EKS_CLUTER_NAME = "demo-dev"
         IMAGE_NAME = "node${BUILD_ID}"
-//         SONAR_PROJECT_NAME= "tspring-api"
-//         SONAR_PROJECT_LOGIN = credentials('tspring-api-login')
     }
     stages {
-//         stage('SONAR CODE QUALITY') {
-//         steps {
-//             sh '''
-//                 sonar-scanner \
-//                     -Dsonar.projectKey=${SONAR_PROJECT_NAME} \
-//                     -Dsonar.sources=. \
-//                     -Dsonar.host.url=https://sonar.tspring.co \
-//                     -Dsonar.login=${SONAR_PROJECT_LOGIN}
-//                 '''
-//             }
-//         }
         stage('DOCKER IMAGE BUILD') {
         steps {
             sh '''
